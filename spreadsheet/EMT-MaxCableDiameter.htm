@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Max Cable Diameter in mm</title>
+  <style>
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: right;
+      background-color: #ffffff;
+      white-space: nowrap;
+    }
+
+    caption {
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background-color: #f8f9fa;
+      color: #1f2937;
+      border: 1px solid #cbd5e1;
+      border-bottom: none;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+
+    th, td {
+      padding: 0.5rem 0.65rem;
+      border: 1px solid #cbd5e1;
+    }
+
+    thead th {
+      color: #1e293b;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+
+    /* Column A (EMT Size) styling */
+    th.col-a, td.col-a {
+      text-align: left;
+      font-weight: 600;
+      background-color: #f1f5f9;
+      /* Line between column A and the next column */
+      border-right: 2px solid #64748b;
+    }
+
+    /* Prominent line between Row 2 and Row 3 */
+    tr.row-divider th,
+    tr.row-divider td {
+      border-bottom: 2.5px solid #475569 !important;
+    }
+
+    /* High-contrast alternating background colors for columns 1 through 20 */
+    .col-tint-odd {
+      background-color: #ffffff;
+    }
+    .col-tint-even {
+      background-color: #e2e8f0;
+    }
+
+    /* Subtle row hover feedback */
+    tbody tr:hover td {
+      filter: brightness(0.96);
+    }
+  </style>
+</head>
+<body>
+
+<div class="table-container">
+  <table>
+    <caption>Max Allowable Cable Diameter in mm. (based upon the 2024 Canadian Electrical Code - Table 9C, 9E, 9G)<br>Instructions: Select Trade Size on left side and then number of cables from top row.</caption>
+    <thead>
+      <tr  class="row-divider">
+        <th scope="col" class="col-a">EMT SIZE</th>
+        <th scope="col" class="col-tint-odd">1</th>
+        <th scope="col" class="col-tint-even">2</th>
+        <th scope="col" class="col-tint-odd">3</th>
+        <th scope="col" class="col-tint-even">4</th>
+        <th scope="col" class="col-tint-odd">5</th>
+        <th scope="col" class="col-tint-even">6</th>
+        <th scope="col" class="col-tint-odd">7</th>
+        <th scope="col" class="col-tint-even">8</th>
+        <th scope="col" class="col-tint-odd">9</th>
+        <th scope="col" class="col-tint-even">10</th>
+        <th scope="col" class="col-tint-odd">11</th>
+        <th scope="col" class="col-tint-even">12</th>
+        <th scope="col" class="col-tint-odd">13</th>
+        <th scope="col" class="col-tint-even">14</th>
+        <th scope="col" class="col-tint-odd">15</th>
+        <th scope="col" class="col-tint-even">16</th>
+        <th scope="col" class="col-tint-odd">17</th>
+        <th scope="col" class="col-tint-even">18</th>
+        <th scope="col" class="col-tint-odd">19</th>
+        <th scope="col" class="col-tint-even">20</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Row 1 -->
+      <tr>
+        <th scope="row" class="col-a">16 (1/2")</th>
+        <td class="col-tint-odd">11.211</td>
+        <td class="col-tint-even">6.063</td>
+        <td class="col-tint-odd">5.623</td>
+        <td class="col-tint-even">4.870</td>
+        <td class="col-tint-odd">4.356</td>
+        <td class="col-tint-even">3.976</td>
+        <td class="col-tint-odd">3.681</td>
+        <td class="col-tint-even">3.444</td>
+        <td class="col-tint-odd">3.247</td>
+        <td class="col-tint-even">3.080</td>
+        <td class="col-tint-odd">2.937</td>
+        <td class="col-tint-even">2.812</td>
+        <td class="col-tint-odd">2.701</td>
+        <td class="col-tint-even">2.603</td>
+        <td class="col-tint-odd">2.515</td>
+        <td class="col-tint-even">2.435</td>
+        <td class="col-tint-odd">2.362</td>
+        <td class="col-tint-even">2.296</td>
+        <td class="col-tint-odd">2.235</td>
+        <td class="col-tint-even">2.178</td>
+      </tr>
+      <!-- Row 2 (with bottom dividing line separating Row 2 and Row 3) -->
+      <tr>
+        <th scope="row" class="col-a">21 (3/4")</th>
+        <td class="col-tint-odd">14.924</td>
+        <td class="col-tint-even">8.071</td>
+        <td class="col-tint-odd">7.486</td>
+        <td class="col-tint-even">6.483</td>
+        <td class="col-tint-odd">5.798</td>
+        <td class="col-tint-even">5.293</td>
+        <td class="col-tint-odd">4.901</td>
+        <td class="col-tint-even">4.584</td>
+        <td class="col-tint-odd">4.322</td>
+        <td class="col-tint-even">4.100</td>
+        <td class="col-tint-odd">3.909</td>
+        <td class="col-tint-even">3.743</td>
+        <td class="col-tint-odd">3.596</td>
+        <td class="col-tint-even">3.465</td>
+        <td class="col-tint-odd">3.348</td>
+        <td class="col-tint-even">3.241</td>
+        <td class="col-tint-odd">3.145</td>
+        <td class="col-tint-even">3.056</td>
+        <td class="col-tint-odd">2.975</td>
+        <td class="col-tint-even">2.899</td>
+      </tr>
+      <!-- Row 3 -->
+      <tr>
+        <th scope="row" class="col-a">27 (1")</th>
+        <td class="col-tint-odd">19.074</td>
+        <td class="col-tint-even">10.315</td>
+        <td class="col-tint-odd">9.567</td>
+        <td class="col-tint-even">8.285</td>
+        <td class="col-tint-odd">7.410</td>
+        <td class="col-tint-even">6.765</td>
+        <td class="col-tint-odd">6.263</td>
+        <td class="col-tint-even">5.858</td>
+        <td class="col-tint-odd">5.523</td>
+        <td class="col-tint-even">5.240</td>
+        <td class="col-tint-odd">4.996</td>
+        <td class="col-tint-even">4.783</td>
+        <td class="col-tint-odd">4.596</td>
+        <td class="col-tint-even">4.429</td>
+        <td class="col-tint-odd">4.278</td>
+        <td class="col-tint-even">4.143</td>
+        <td class="col-tint-odd">4.019</td>
+        <td class="col-tint-even">3.906</td>
+        <td class="col-tint-odd">3.801</td>
+        <td class="col-tint-even">3.705</td>
+      </tr>
+      <!-- Row 4 -->
+      <tr>
+        <th scope="row" class="col-a">35 (1-1/4")</th>
+        <td class="col-tint-odd">25.189</td>
+        <td class="col-tint-even">13.622</td>
+        <td class="col-tint-odd">12.634</td>
+        <td class="col-tint-even">10.942</td>
+        <td class="col-tint-odd">9.786</td>
+        <td class="col-tint-even">8.934</td>
+        <td class="col-tint-odd">8.271</td>
+        <td class="col-tint-even">7.737</td>
+        <td class="col-tint-odd">7.294</td>
+        <td class="col-tint-even">6.920</td>
+        <td class="col-tint-odd">6.598</td>
+        <td class="col-tint-even">6.317</td>
+        <td class="col-tint-odd">6.069</td>
+        <td class="col-tint-even">5.848</td>
+        <td class="col-tint-odd">5.650</td>
+        <td class="col-tint-even">5.471</td>
+        <td class="col-tint-odd">5.307</td>
+        <td class="col-tint-even">5.158</td>
+        <td class="col-tint-odd">5.020</td>
+        <td class="col-tint-even">4.893</td>
+      </tr>
+      <!-- Row 5 -->
+      <tr>
+        <th scope="row" class="col-a">41 (1-1/2")</th>
+        <td class="col-tint-odd">29.484</td>
+        <td class="col-tint-even">15.945</td>
+        <td class="col-tint-odd">14.789</td>
+        <td class="col-tint-even">12.807</td>
+        <td class="col-tint-odd">11.455</td>
+        <td class="col-tint-even">10.457</td>
+        <td class="col-tint-odd">9.681</td>
+        <td class="col-tint-even">9.056</td>
+        <td class="col-tint-odd">8.538</td>
+        <td class="col-tint-even">8.100</td>
+        <td class="col-tint-odd">7.723</td>
+        <td class="col-tint-even">7.394</td>
+        <td class="col-tint-odd">7.104</td>
+        <td class="col-tint-even">6.846</td>
+        <td class="col-tint-odd">6.614</td>
+        <td class="col-tint-even">6.404</td>
+        <td class="col-tint-odd">6.212</td>
+        <td class="col-tint-even">6.037</td>
+        <td class="col-tint-odd">5.876</td>
+        <td class="col-tint-even">5.728</td>
+      </tr>
+      <!-- Row 6 -->
+      <tr>
+        <th scope="row" class="col-a">53 (2")</th>
+        <td class="col-tint-odd">37.929</td>
+        <td class="col-tint-even">20.512</td>
+        <td class="col-tint-odd">19.024</td>
+        <td class="col-tint-even">16.476</td>
+        <td class="col-tint-odd">14.736</td>
+        <td class="col-tint-even">13.452</td>
+        <td class="col-tint-odd">12.454</td>
+        <td class="col-tint-even">11.650</td>
+        <td class="col-tint-odd">10.984</td>
+        <td class="col-tint-even">10.420</td>
+        <td class="col-tint-odd">9.935</td>
+        <td class="col-tint-even">9.512</td>
+        <td class="col-tint-odd">9.139</td>
+        <td class="col-tint-even">8.807</td>
+        <td class="col-tint-odd">8.508</td>
+        <td class="col-tint-even">8.238</td>
+        <td class="col-tint-odd">7.992</td>
+        <td class="col-tint-even">7.767</td>
+        <td class="col-tint-odd">7.559</td>
+        <td class="col-tint-even">7.368</td>
+      </tr>
+      <!-- Row 7 -->
+      <tr>
+        <th scope="row" class="col-a">63 (2-1/2")</th>
+        <td class="col-tint-odd">50.524</td>
+        <td class="col-tint-even">27.323</td>
+        <td class="col-tint-odd">25.341</td>
+        <td class="col-tint-even">21.946</td>
+        <td class="col-tint-odd">19.629</td>
+        <td class="col-tint-even">17.919</td>
+        <td class="col-tint-odd">16.590</td>
+        <td class="col-tint-even">15.518</td>
+        <td class="col-tint-odd">14.631</td>
+        <td class="col-tint-even">13.880</td>
+        <td class="col-tint-odd">13.234</td>
+        <td class="col-tint-even">12.671</td>
+        <td class="col-tint-odd">12.174</td>
+        <td class="col-tint-even">11.731</td>
+        <td class="col-tint-odd">11.333</td>
+        <td class="col-tint-even">10.973</td>
+        <td class="col-tint-odd">10.646</td>
+        <td class="col-tint-even">10.346</td>
+        <td class="col-tint-odd">10.070</td>
+        <td class="col-tint-even">9.815</td>
+      </tr>
+      <!-- Row 8 -->
+      <tr>
+        <th scope="row" class="col-a">78 (3")</th>
+        <td class="col-tint-odd">62.027</td>
+        <td class="col-tint-even">33.543</td>
+        <td class="col-tint-odd">31.111</td>
+        <td class="col-tint-even">26.943</td>
+        <td class="col-tint-odd">24.098</td>
+        <td class="col-tint-even">21.999</td>
+        <td class="col-tint-odd">20.367</td>
+        <td class="col-tint-even">19.051</td>
+        <td class="col-tint-odd">17.962</td>
+        <td class="col-tint-even">17.040</td>
+        <td class="col-tint-odd">16.247</td>
+        <td class="col-tint-even">15.555</td>
+        <td class="col-tint-odd">14.945</td>
+        <td class="col-tint-even">14.401</td>
+        <td class="col-tint-odd">13.913</td>
+        <td class="col-tint-even">13.471</td>
+        <td class="col-tint-odd">13.069</td>
+        <td class="col-tint-even">12.701</td>
+        <td class="col-tint-odd">12.362</td>
+        <td class="col-tint-even">12.049</td>
+      </tr>
+      <!-- Row 9 -->
+      <tr>
+        <th scope="row" class="col-a">91 (3-1/2")</th>
+        <td class="col-tint-odd">70.908</td>
+        <td class="col-tint-even">38.346</td>
+        <td class="col-tint-odd">35.565</td>
+        <td class="col-tint-even">30.801</td>
+        <td class="col-tint-odd">27.549</td>
+        <td class="col-tint-even">25.149</td>
+        <td class="col-tint-odd">23.283</td>
+        <td class="col-tint-even">21.779</td>
+        <td class="col-tint-odd">20.534</td>
+        <td class="col-tint-even">19.480</td>
+        <td class="col-tint-odd">18.573</td>
+        <td class="col-tint-even">17.783</td>
+        <td class="col-tint-odd">17.085</td>
+        <td class="col-tint-even">16.464</td>
+        <td class="col-tint-odd">15.905</td>
+        <td class="col-tint-even">15.400</td>
+        <td class="col-tint-odd">14.941</td>
+        <td class="col-tint-even">14.520</td>
+        <td class="col-tint-odd">14.132</td>
+        <td class="col-tint-even">13.774</td>
+      </tr>
+      <!-- Row 10 -->
+      <tr>
+        <th scope="row" class="col-a">103 (4")</th>
+        <td class="col-tint-odd">80.081</td>
+        <td class="col-tint-even">43.307</td>
+        <td class="col-tint-odd">40.166</td>
+        <td class="col-tint-even">34.785</td>
+        <td class="col-tint-odd">31.113</td>
+        <td class="col-tint-even">28.402</td>
+        <td class="col-tint-odd">26.295</td>
+        <td class="col-tint-even">24.597</td>
+        <td class="col-tint-odd">23.190</td>
+        <td class="col-tint-even">22.000</td>
+        <td class="col-tint-odd">20.976</td>
+        <td class="col-tint-even">20.083</td>
+        <td class="col-tint-odd">19.295</td>
+        <td class="col-tint-even">18.593</td>
+        <td class="col-tint-odd">17.963</td>
+        <td class="col-tint-even">17.393</td>
+        <td class="col-tint-odd">16.873</td>
+        <td class="col-tint-even">16.398</td>
+        <td class="col-tint-odd">15.961</td>
+        <td class="col-tint-even">15.556</td>
+      </tr>
+      <!-- Row 11 -->
+      <tr>
+        <th scope="row" class="col-a">129 (5")</th>
+        <td class="col-tint-odd">93.839</td>
+        <td class="col-tint-even">50.746</td>
+        <td class="col-tint-odd">48.402</td>
+        <td class="col-tint-even">41.917</td>
+        <td class="col-tint-odd">37.492</td>
+        <td class="col-tint-even">34.225</td>
+        <td class="col-tint-odd">31.687</td>
+        <td class="col-tint-even">29.640</td>
+        <td class="col-tint-odd">27.945</td>
+        <td class="col-tint-even">26.511</td>
+        <td class="col-tint-odd">25.277</td>
+        <td class="col-tint-even">24.201</td>
+        <td class="col-tint-odd">23.252</td>
+        <td class="col-tint-even">22.406</td>
+        <td class="col-tint-odd">21.646</td>
+        <td class="col-tint-even">20.959</td>
+        <td class="col-tint-odd">20.333</td>
+        <td class="col-tint-even">19.760</td>
+        <td class="col-tint-odd">19.233</td>
+        <td class="col-tint-even">18.746</td>
+      </tr>
+      <!-- Row 12 -->
+      <tr>
+        <th scope="row" class="col-a">155 (6")</th>
+        <td class="col-tint-odd">112.697</td>
+        <td class="col-tint-even">60.943</td>
+        <td class="col-tint-odd">56.524</td>
+        <td class="col-tint-even">48.951</td>
+        <td class="col-tint-odd">43.783</td>
+        <td class="col-tint-even">39.969</td>
+        <td class="col-tint-odd">37.004</td>
+        <td class="col-tint-even">34.614</td>
+        <td class="col-tint-odd">32.634</td>
+        <td class="col-tint-even">30.960</td>
+        <td class="col-tint-odd">29.519</td>
+        <td class="col-tint-even">28.262</td>
+        <td class="col-tint-odd">27.153</td>
+        <td class="col-tint-even">26.166</td>
+        <td class="col-tint-odd">25.278</td>
+        <td class="col-tint-even">24.476</td>
+        <td class="col-tint-odd">23.745</td>
+        <td class="col-tint-even">23.076</td>
+        <td class="col-tint-odd">22.460</td>
+        <td class="col-tint-even">21.892</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
