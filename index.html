@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Shane McDonald. All rights reserved. -->
+<!-- Version 1.0 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conduit to Cable Sizer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom alternating options styling for conduit select box */
+        #conduit_size option:nth-child(even) {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        #conduit_size option:nth-child(odd) {
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-500 p-2.5 rounded-xl text-white shadow-lg">
+                    <i class="fa-solid fa-plug-circle-bolt text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Conduit & Cable Sizer</h1>
+                    <p class="text-xs text-slate-400">Electrical Conduit Fill Calculator (EMT Standard)</p>
+                    <p class="text-xs text-slate-400">Copyright (c) 2026 Shane McDonald. All rights reserved.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">
+                <i class="fa-solid fa-shield-halved text-brand-500"></i>
+                <span>CEC 2024 Standard Fill Percentages (53%, 31%, 40%)</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- Left Panel: Inputs & Controls -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <!-- Calculator Mode Box -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <label class="block text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-brand-600"></i>
+                        What are we Calculating?
+                    </label>
+                    <div class="space-y-2.5">
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 cursor-pointer transition-colors bg-slate-50/50 has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                            <input type="radio" name="cable_selection" value="min_conduit" checked class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="ml-3 font-medium text-sm text-slate-800">Minimum Conduit Size</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 cursor-pointer transition-colors bg-slate-50/50 has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                            <input type="radio" name="cable_selection" value="max_cables" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="ml-3 font-medium text-sm text-slate-800">Max Number of Cables</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 cursor-pointer transition-colors bg-slate-50/50 has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                            <input type="radio" name="cable_selection" value="max_diameter" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="ml-3 font-medium text-sm text-slate-800">Max Cable Diameter</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Parameters Box -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+                    <h2 class="text-sm font-semibold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <i class="fa-solid fa-gears text-brand-600"></i>
+                        Cable & Conduit Parameters
+                    </h2>
+
+                    <!-- Unit Selector -->
+                    <div>
+                        <label for="cable_unit" class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">
+                            Cable Measurement Unit
+                        </label>
+                        <select id="cable_unit" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 p-3 transition-all">
+                            <option value="mm">Millimeters (mm)</option>
+                            <option value="inch">Inches (in)</option>
+                        </select>
+                    </div>
+
+                    <!-- Number of Cables -->
+                    <div id="wrapper_cable_number">
+                        <label for="cable_number" class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">
+                            Number of Cables (<span class="normal-case">Quantity</span>)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="cable_number" min="1" step="1" value="3" placeholder="e.g. 3" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 p-3 transition-all disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-hashtag text-xs"></i>
+                            </div>
+                        </div>
+                        <p id="err_cable_number" class="hidden text-xs text-red-500 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-exclamation"></i> Must be a number greater than 0
+                        </p>
+                    </div>
+
+                    <!-- Cable Diameter -->
+                    <div id="wrapper_cable_diameter">
+                        <label for="cable_diameter" class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">
+                            Cable Diameter (<span id="unit_label">mm</span>)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="cable_diameter" min="0.1" step="0.01" value="10" placeholder="e.g. 10" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 p-3 transition-all disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400 font-semibold text-xs" id="unit_badge">
+                                mm
+                            </div>
+                        </div>
+                        <p id="err_cable_diameter" class="hidden text-xs text-red-500 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-exclamation"></i> Must be a valid positive number
+                        </p>
+                    </div>
+
+                    <!-- Conduit Size Selector -->
+                    <div id="wrapper_conduit_size">
+                        <label for="conduit_size" class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">
+                            EMT Conduit Size
+                        </label>
+                        <select id="conduit_size" disabled class="w-full border border-slate-300 text-slate-900 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 p-3 transition-all disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed">
+                            <option value="16">16 (1/2")</option>
+                            <option value="21">21 (3/4")</option>
+                            <option value="27" selected>27 (1")</option>
+                            <option value="35">35 (1-1/4")</option>
+                            <option value="41">41 (1-1/2")</option>
+                            <option value="53">53 (2")</option>
+                            <option value="63">63 (2-1/2")</option>
+                            <option value="78">78 (3")</option>
+                            <option value="91">91 (3-1/2")</option>
+                            <option value="103">103 (4")</option>
+                            <option value="129">129 (5")</option>
+                            <option value="155">155 (6")</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Panel: Results, Diagram & Technical Breakdown -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+
+                <!-- Main Highlight Output Card -->
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl relative overflow-hidden border border-slate-700">
+                    <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+                        <i class="fa-solid fa-circle-nodes text-9xl"></i>
+                    </div>
+
+                    <div class="relative z-10">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30 uppercase tracking-wider mb-3" id="output_mode_badge">
+                            Result: Minimum Conduit Size
+                        </span>
+                        
+                        <div class="mt-2">
+                            <div class="text-xs uppercase tracking-widest text-slate-400 font-medium" id="output_label">Required EMT Conduit Size</div>
+                            <div class="text-3xl sm:text-5xl font-extrabold text-white mt-1 tracking-tight" id="output_value">
+                                --
+                            </div>
+                        </div>
+
+                        <div id="status_alert" class="mt-4 p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs sm:text-sm text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-brand-400 text-base"></i>
+                            <span id="status_text">Select inputs to view calculations.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Preview & Area Breakdown -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    
+                    <!-- Conduit Cross-Section Visualizer -->
+                    <div class="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye text-brand-600"></i> Visual Cross-Section
+                        </h3>
+                        <div class="relative w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center">
+                            <svg id="conduit_svg" viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                                <!-- Dynamic JS SVG Rendering -->
+                            </svg>
+                        </div>
+                        <span class="text-[11px] text-slate-400 mt-2 text-center" id="svg_caption">Conduit vs Total Cable Area</span>
+                    </div>
+
+                    <!-- Numerical Fill & Area Stats -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
+                            Fill Statistics
+                        </h3>
+
+                        <!-- Fill Percentage Bar -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-600">Conduit Fill Capacity</span>
+                                <span id="fill_percentage_text" class="font-bold text-slate-800">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
+                                <div id="fill_bar" class="bg-brand-500 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>0%</span>
+                                <span id="max_allowed_fill_text">Allowed Max Fill Limit</span>
+                            </div>
+                        </div>
+
+                        <!-- Technical Specs Matrix -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                <div class="text-[10px] uppercase text-slate-400 font-semibold">Total Cable Area</div>
+                                <div id="stat_total_cable_area" class="text-sm font-bold text-slate-800 mt-0.5">0 mm²</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                <div class="text-[10px] uppercase text-slate-400 font-semibold">Allowable Fill Area</div>
+                                <div id="stat_allowable_area" class="text-sm font-bold text-slate-800 mt-0.5">0 mm²</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                <div class="text-[10px] uppercase text-slate-400 font-semibold">Single Cable Area</div>
+                                <div id="stat_single_cable_area" class="text-sm font-bold text-slate-800 mt-0.5">0 mm²</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                <div class="text-[10px] uppercase text-slate-400 font-semibold">Applicable Rule</div>
+                                <div id="stat_rule_text" class="text-sm font-bold text-slate-800 mt-0.5">--</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Technical Specification Table Reference -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-table text-brand-600"></i> EMT Internal Fill Area Reference Table (mm²)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-slate-700">
+                                    <th class="p-2 font-semibold">EMT Size</th>
+                                    <th class="p-2 font-semibold">1 Cable (53%)</th>
+                                    <th class="p-2 font-semibold">2 Cables (31%)</th>
+                                    <th class="p-2 font-semibold">3+ Cables (40%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reference_table_body" class="divide-y divide-slate-100 text-slate-600 font-mono text-[11px]">
+                                <!-- Dynamically populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            Conduit Fill Calculator &bull; Standard Electrical Engineering Reference &bull; Internal Calculations Performed in mm²
+        </div>
+    </footer>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Data Specifications for EMT Conduits
+        const CONDUIT_DATA = [
+            { size: 16,  label: '16 (1/2")',   area1: 98.72,   area2: 57.74,   area3Plus: 74.51   },
+            { size: 21,  label: '21 (3/4")',   area1: 174.93,  area2: 102.32,  area3Plus: 132.03  },
+            { size: 27,  label: '27 (1")',     area1: 285.74,  area2: 167.13,  area3Plus: 215.65  },
+            { size: 35,  label: '35 (1-1/4")', area1: 498.33,  area2: 291.48,  area3Plus: 376.1   },
+            { size: 41,  label: '41 (1-1/2")', area1: 682.77,  area2: 399.36,  area3Plus: 515.3   },
+            { size: 53,  label: '53 (2")',     area1: 1129.9,  area2: 660.89,  area3Plus: 852.76  },
+            { size: 63,  label: '63 (2-1/2")', area1: 2004.86, area2: 1172.66, area3Plus: 1513.1  },
+            { size: 78,  label: '78 (3")',     area1: 3021.66, area2: 1767.38, area3Plus: 2280.49 },
+            { size: 91,  label: '91 (3-1/2")', area1: 3948.97, area2: 2309.77, area3Plus: 2980.35 },
+            { size: 103, label: '103 (4")',    area1: 5036.76, area2: 2946.03, area3Plus: 3801.33 },
+            { size: 129, label: '129 (5")',    area1: 6916,    area2: 4045,    area3Plus: 5520    },
+            { size: 155, label: '155 (6")',    area1: 9975,    area2: 5834,    area3Plus: 7528    }
+        ];
+
+        const INCH_TO_MM = 25.4;
+
+        // DOM Element Cache
+        const cableNumberInput = document.getElementById('cable_number');
+        const cableDiameterInput = document.getElementById('cable_diameter');
+        const cableUnitSelect = document.getElementById('cable_unit');
+        const conduitSizeSelect = document.getElementById('conduit_size');
+        const radioButtons = document.querySelectorAll('input[name="cable_selection"]');
+
+        const wrapperCableNumber = document.getElementById('wrapper_cable_number');
+        const wrapperCableDiameter = document.getElementById('wrapper_cable_diameter');
+        const wrapperConduitSize = document.getElementById('wrapper_conduit_size');
+
+        const errCableNumber = document.getElementById('err_cable_number');
+        const errCableDiameter = document.getElementById('err_cable_diameter');
+
+        const unitLabel = document.getElementById('unit_label');
+        const unitBadge = document.getElementById('unit_badge');
+
+        const outputModeBadge = document.getElementById('output_mode_badge');
+        const outputLabel = document.getElementById('output_label');
+        const outputValue = document.getElementById('output_value');
+        const statusText = document.getElementById('status_text');
+        const statusAlert = document.getElementById('status_alert');
+
+        const fillBar = document.getElementById('fill_bar');
+        const fillPercentageText = document.getElementById('fill_percentage_text');
+        const maxAllowedFillText = document.getElementById('max_allowed_fill_text');
+
+        const statTotalCableArea = document.getElementById('stat_total_cable_area');
+        const statAllowableArea = document.getElementById('stat_allowable_area');
+        const statSingleCableArea = document.getElementById('stat_single_cable_area');
+        const statRuleText = document.getElementById('stat_rule_text');
+
+        const conduitSvg = document.getElementById('conduit_svg');
+        const referenceTableBody = document.getElementById('reference_table_body');
+
+        // Get currently active calculation mode
+        function getSelectedMode() {
+            const checked = document.querySelector('input[name="cable_selection"]:checked');
+            return checked ? checked.value : 'min_conduit';
+        }
+
+        // Helper: Get allowable fill area in mm2 for a given conduit object and cable count N
+        function getAllowableArea(conduit, count) {
+            if (count === 1) return { area: conduit.area1, pct: 53, rule: '1 Cable (53%)' };
+            if (count === 2) return { area: conduit.area2, pct: 31, rule: '2 Cables (31%)' };
+            return { area: conduit.area3Plus, pct: 40, rule: '3+ Cables (40%)' };
+        }
+
+        // Update UI control enable/disable states and hide active input container
+        function handleModeSwitch() {
+            const mode = getSelectedMode();
+
+            // Enable and show all input wrappers first
+            cableNumberInput.disabled = false;
+            cableDiameterInput.disabled = false;
+            conduitSizeSelect.disabled = false;
+
+            wrapperCableNumber.classList.remove('hidden');
+            wrapperCableDiameter.classList.remove('hidden');
+            wrapperConduitSize.classList.remove('hidden');
+
+            if (mode === 'min_conduit') {
+                conduitSizeSelect.disabled = true;
+                wrapperConduitSize.classList.add('hidden');
+                outputModeBadge.innerText = 'Result: Minimum Conduit Size';
+                outputLabel.innerText = 'Required EMT Size';
+            } else if (mode === 'max_cables') {
+                cableNumberInput.disabled = true;
+                wrapperCableNumber.classList.add('hidden');
+                outputModeBadge.innerText = 'Result: Max Cable Capacity';
+                outputLabel.innerText = 'Maximum Allowed Cables';
+            } else if (mode === 'max_diameter') {
+                cableDiameterInput.disabled = true;
+                wrapperCableDiameter.classList.add('hidden');
+                outputModeBadge.innerText = 'Result: Max Cable Diameter';
+                outputLabel.innerText = 'Maximum Single Cable Diameter';
+            }
+
+            calculate();
+        }
+
+        // Handle Unit Switch (mm <-> inch)
+        function handleUnitSwitch() {
+            const unit = cableUnitSelect.value;
+            unitLabel.innerText = unit;
+            unitBadge.innerText = unit;
+            calculate();
+        }
+
+        // Validate Input Values
+        function validateInputs() {
+            const mode = getSelectedMode();
+            let isValid = true;
+
+            // Validate cable number if enabled
+            if (!cableNumberInput.disabled) {
+                const val = parseFloat(cableNumberInput.value);
+                if (isNaN(val) || val <= 0 || !Number.isInteger(val)) {
+                    errCableNumber.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errCableNumber.classList.add('hidden');
+                }
+            } else {
+                errCableNumber.classList.add('hidden');
+            }
+
+            // Validate cable diameter if enabled
+            if (!cableDiameterInput.disabled) {
+                const val = parseFloat(cableDiameterInput.value);
+                if (isNaN(val) || val <= 0) {
+                    errCableDiameter.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errCableDiameter.classList.add('hidden');
+                }
+            } else {
+                errCableDiameter.classList.add('hidden');
+            }
+
+            return isValid;
+        }
+
+        // Main Calculation Router
+        function calculate() {
+            if (!validateInputs()) {
+                outputValue.innerText = 'Invalid Input';
+                statusText.innerText = 'Please correct the highlighted input errors.';
+                statusAlert.className = "mt-4 p-3 rounded-xl bg-red-950/50 border border-red-800 text-xs sm:text-sm text-red-200 flex items-center gap-2";
+                return;
+            }
+
+            const mode = getSelectedMode();
+            const isInch = cableUnitSelect.value === 'inch';
+
+            if (mode === 'min_conduit') {
+                calcMinConduit(isInch);
+            } else if (mode === 'max_cables') {
+                calcMaxCables(isInch);
+            } else if (mode === 'max_diameter') {
+                calcMaxDiameter(isInch);
+            }
+        }
+
+        // MODE 1: Calculate Minimum Conduit Size
+        function calcMinConduit(isInch) {
+            const count = parseInt(cableNumberInput.value, 10);
+            let diameterInput = parseFloat(cableDiameterInput.value);
+            let diameterMm = isInch ? diameterInput * INCH_TO_MM : diameterInput;
+
+            const singleCableArea = Math.PI * Math.pow(diameterMm / 2, 2);
+            const totalCableArea = count * singleCableArea;
+
+            // Search for smallest conduit size where allowable area >= total cable area
+            let matchedConduit = null;
+            let fillInfo = null;
+
+            for (const conduit of CONDUIT_DATA) {
+                const fill = getAllowableArea(conduit, count);
+                if (fill.area >= totalCableArea) {
+                    matchedConduit = conduit;
+                    fillInfo = fill;
+                    break;
+                }
+            }
+
+            if (matchedConduit) {
+                outputValue.innerText = matchedConduit.label;
+                const fillPct = ((totalCableArea / fillInfo.area) * fillInfo.pct).toFixed(1);
+                
+                statusText.innerText = `Selected conduit fits ${count} cable(s) within the allowable ${fillInfo.pct}% fill limit.`;
+                statusAlert.className = "mt-4 p-3 rounded-xl bg-emerald-950/50 border border-emerald-800 text-xs sm:text-sm text-emerald-200 flex items-center gap-2";
+
+                updateStats(totalCableArea, fillInfo.area, singleCableArea, fillInfo.rule, fillPct, fillInfo.pct);
+                drawDiagram(matchedConduit.size, count, diameterMm);
+                highlightTableEntry(matchedConduit.size);
+            } else {
+                outputValue.innerText = 'Exceeds 6"';
+                statusText.innerText = 'Total cable area exceeds maximum standard EMT conduit capacity (155 / 6").';
+                statusAlert.className = "mt-4 p-3 rounded-xl bg-amber-950/50 border border-amber-800 text-xs sm:text-sm text-amber-200 flex items-center gap-2";
+                
+                const maxConduit = CONDUIT_DATA[CONDUIT_DATA.length - 1];
+                const maxFill = getAllowableArea(maxConduit, count);
+                updateStats(totalCableArea, maxFill.area, singleCableArea, maxFill.rule, 100, maxFill.pct);
+                drawDiagram(maxConduit.size, count, diameterMm);
+                highlightTableEntry(null);
+            }
+        }
+
+        // MODE 2: Calculate Max Number of Cables
+        function calcMaxCables(isInch) {
+            const conduitSize = parseInt(conduitSizeSelect.value, 10);
+            const conduit = CONDUIT_DATA.find(c => c.size === conduitSize);
+            let diameterInput = parseFloat(cableDiameterInput.value);
+            let diameterMm = isInch ? diameterInput * INCH_TO_MM : diameterInput;
+
+            const singleCableArea = Math.PI * Math.pow(diameterMm / 2, 2);
+
+            let maxN = 0;
+
+            // Check tier 1: N = 1 (53% area)
+            if (conduit.area1 >= singleCableArea) {
+                maxN = 1;
+            }
+
+            // Check tier 2: N = 2 (31% area)
+            if (conduit.area2 >= 2 * singleCableArea) {
+                maxN = 2;
+            }
+
+            // Check tier 3: N >= 3 (40% area)
+            const nTier3 = Math.floor(conduit.area3Plus / singleCableArea);
+            if (nTier3 >= 3) {
+                maxN = nTier3;
+            }
+
+            if (maxN > 0) {
+                outputValue.innerText = `${maxN} Cable${maxN > 1 ? 's' : ''}`;
+                const fillInfo = getAllowableArea(conduit, maxN);
+                const totalCableArea = maxN * singleCableArea;
+                const fillPct = ((totalCableArea / fillInfo.area) * fillInfo.pct).toFixed(1);
+
+                statusText.innerText = `Maximum ${maxN} cable(s) of ${diameterInput} ${cableUnitSelect.value} fit in EMT ${conduit.label}.`;
+                statusAlert.className = "mt-4 p-3 rounded-xl bg-emerald-950/50 border border-emerald-800 text-xs sm:text-sm text-emerald-200 flex items-center gap-2";
+
+                updateStats(totalCableArea, fillInfo.area, singleCableArea, fillInfo.rule, fillPct, fillInfo.pct);
+                drawDiagram(conduit.size, maxN, diameterMm);
+                highlightTableEntry(conduit.size);
+            } else {
+                outputValue.innerText = "0 Cables";
+                statusText.innerText = "Cable diameter is too large to fit even 1 cable in this conduit size.";
+                statusAlert.className = "mt-4 p-3 rounded-xl bg-amber-950/50 border border-amber-800 text-xs sm:text-sm text-amber-200 flex items-center gap-2";
+                
+                updateStats(singleCableArea, conduit.area1, singleCableArea, "1 Cable (53%)", 100, 53);
+                drawDiagram(conduit.size, 1, diameterMm);
+                highlightTableEntry(conduit.size);
+            }
+        }
+
+        // MODE 3: Calculate Max Cable Diameter
+        function calcMaxDiameter(isInch) {
+            const count = parseInt(cableNumberInput.value, 10);
+            const conduitSize = parseInt(conduitSizeSelect.value, 10);
+            const conduit = CONDUIT_DATA.find(c => c.size === conduitSize);
+
+            const fillInfo = getAllowableArea(conduit, count);
+            const maxTotalArea = fillInfo.area;
+            const maxSingleArea = maxTotalArea / count;
+
+            // Area = PI * (D/2)^2 => D = 2 * sqrt(Area / PI)
+            const maxDiameterMm = 2 * Math.sqrt(maxSingleArea / Math.PI);
+            const outputDiameter = isInch ? (maxDiameterMm / INCH_TO_MM) : maxDiameterMm;
+            const unitStr = cableUnitSelect.value;
+
+            outputValue.innerText = `${outputDiameter.toFixed(2)} ${unitStr}`;
+            statusText.innerText = `Max cable diameter for ${count} cable(s) in EMT ${conduit.label} is ${outputDiameter.toFixed(2)} ${unitStr}.`;
+            statusAlert.className = "mt-4 p-3 rounded-xl bg-emerald-950/50 border border-emerald-800 text-xs sm:text-sm text-emerald-200 flex items-center gap-2";
+
+            updateStats(maxTotalArea, maxTotalArea, maxSingleArea, fillInfo.rule, fillInfo.pct, fillInfo.pct);
+            drawDiagram(conduit.size, count, maxDiameterMm);
+            highlightTableEntry(conduit.size);
+        }
+
+        // Update Stats Block in UI
+        function updateStats(totalCableArea, allowableArea, singleCableArea, ruleText, fillPct, maxAllowedPct) {
+            statTotalCableArea.innerText = `${totalCableArea.toFixed(1)} mm²`;
+            statAllowableArea.innerText = `${allowableArea.toFixed(1)} mm²`;
+            statSingleCableArea.innerText = `${singleCableArea.toFixed(1)} mm²`;
+            statRuleText.innerText = ruleText;
+
+            const cappedBarPct = Math.min(Math.max((fillPct / maxAllowedPct) * 100, 0), 100);
+            fillBar.style.width = `${cappedBarPct}%`;
+            
+            if (cappedBarPct > 99) {
+                fillBar.className = "bg-red-500 h-3 rounded-full transition-all duration-300";
+            } else if (cappedBarPct > 85) {
+                fillBar.className = "bg-amber-500 h-3 rounded-full transition-all duration-300";
+            } else {
+                fillBar.className = "bg-brand-500 h-3 rounded-full transition-all duration-300";
+            }
+
+            fillPercentageText.innerText = `${fillPct}% / ${maxAllowedPct}% Limit`;
+            maxAllowedFillText.innerText = `Max Fill Limit: ${maxAllowedPct}%`;
+        }
+
+        // Render Cross-Section Interactive Diagram
+        function drawDiagram(conduitSize, count, cableDiameterMm) {
+            conduitSvg.innerHTML = '';
+
+            const cx = 100;
+            const cy = 100;
+            const outerR = 85;
+
+            // Draw Conduit Outer Shell
+            const outerCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            outerCircle.setAttribute("cx", cx);
+            outerCircle.setAttribute("cy", cy);
+            outerCircle.setAttribute("r", outerR);
+            outerCircle.setAttribute("fill", "#cbd5e1");
+            outerCircle.setAttribute("stroke", "#475569");
+            outerCircle.setAttribute("stroke-width", "4");
+            conduitSvg.appendChild(outerCircle);
+
+            // Inner Conduit Hole
+            const innerR = 75;
+            const innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            innerCircle.setAttribute("cx", cx);
+            innerCircle.setAttribute("cy", cy);
+            innerCircle.setAttribute("r", innerR);
+            innerCircle.setAttribute("fill", "#0f172a");
+            conduitSvg.appendChild(innerCircle);
+
+            // Calculate scaled cable circles relative to conduit size
+            // Scale factor approximation based on standard conduit diameter mm
+            const approxConduitInnerMm = Math.sqrt((CONDUIT_DATA.find(c => c.size === conduitSize)?.area1 || 100) / 0.53 / Math.PI) * 2;
+            const scaleFactor = innerR / (approxConduitInnerMm / 2);
+            let cableR = (cableDiameterMm / 2) * scaleFactor;
+
+            // Cap radius to ensure visually meaningful output
+            cableR = Math.min(Math.max(cableR, 3), innerR * 0.9);
+
+            const displayCount = Math.min(count, 30); // Limit max drawn cables for visual cleanliness
+
+            if (displayCount === 1) {
+                addCableSvg(cx, cy, cableR);
+            } else if (displayCount === 2) {
+                const offset = cableR * 0.9;
+                addCableSvg(cx - offset, cy, cableR);
+                addCableSvg(cx + offset, cy, cableR);
+            } else {
+                const ringRadius = Math.min(innerR - cableR - 4, Math.max(cableR * 1.1, innerR * 0.45));
+                for (let i = 0; i < displayCount; i++) {
+                    const angle = (i * 2 * Math.PI) / displayCount;
+                    const x = cx + ringRadius * Math.cos(angle);
+                    const y = cy + ringRadius * Math.sin(angle);
+                    addCableSvg(x, y, cableR);
+                }
+            }
+
+            if (count > 30) {
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", cx);
+                text.setAttribute("y", cy);
+                text.setAttribute("fill", "#ffffff");
+                text.setAttribute("font-size", "12");
+                text.setAttribute("font-weight", "bold");
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("dominant-baseline", "middle");
+                text.textContent = `+${count - 30} more`;
+                conduitSvg.appendChild(text);
+            }
+        }
+
+        function addCableSvg(x, y, r) {
+            const cable = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            cable.setAttribute("cx", x);
+            cable.setAttribute("cy", y);
+            cable.setAttribute("r", r);
+            cable.setAttribute("fill", "#0284c7");
+            cable.setAttribute("stroke", "#38bdf8");
+            cable.setAttribute("stroke-width", "1.5");
+            conduitSvg.appendChild(cable);
+        }
+
+        // Render Fill Reference Table
+        function buildReferenceTable() {
+            referenceTableBody.innerHTML = '';
+            CONDUIT_DATA.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.id = `row_conduit_${row.size}`;
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-2 font-semibold text-slate-800">${row.label}</td>
+                    <td class="p-2">${row.area1}</td>
+                    <td class="p-2">${row.area2}</td>
+                    <td class="p-2">${row.area3Plus}</td>
+                `;
+                referenceTableBody.appendChild(tr);
+            });
+        }
+
+        // Highlight active conduit in reference table
+        function highlightTableEntry(size) {
+            CONDUIT_DATA.forEach(row => {
+                const tr = document.getElementById(`row_conduit_${row.size}`);
+                if (tr) {
+                    if (row.size === size) {
+                        tr.className = "bg-brand-50 text-brand-900 font-bold border-l-4 border-brand-500";
+                    } else {
+                        tr.className = "hover:bg-slate-50 transition-colors";
+                    }
+                }
+            });
+        }
+
+        // Event Listeners Initialization
+        function initEvents() {
+            radioButtons.forEach(radio => radio.addEventListener('change', handleModeSwitch));
+            cableUnitSelect.addEventListener('change', handleUnitSwitch);
+            cableNumberInput.addEventListener('input', calculate);
+            cableDiameterInput.addEventListener('input', calculate);
+            conduitSizeSelect.addEventListener('change', calculate);
+        }
+
+        // App Entry Point
+        window.onload = function() {
+            buildReferenceTable();
+            initEvents();
+            handleModeSwitch();
+        };
+    </script>
+</body>
+</html>
