@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Copyright (c) 2026 Shane McDonald. All rights reserved. -->
-<!-- Version 1.1 -->
+<!-- Version 1.2 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -13,11 +13,10 @@
       --text-color: #f8fafc;
       --text-muted: #94a3b8;
       --accent-color: #38bdf8;
-      --accent-hover: #0284c7;
       --border-color: #334155;
       --error-color: #ef4444;
-      --success-color: #22c55e;
       --warning-color: #f59e0b;
+      --danger-hover: #dc2626;
     }
 
     * {
@@ -40,7 +39,7 @@
     .container {
       background-color: var(--card-bg);
       width: 100%;
-      max-width: 900px;
+      max-width: 950px;
       padding: 28px;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -65,20 +64,20 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 24px;
+      margin-bottom: 24px;
     }
 
     @media (min-width: 768px) {
       .grid-layout {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1.2fr 1fr;
       }
     }
 
     .form-group {
       margin-bottom: 18px;
-      transition: all 0.3s ease;
     }
 
-    .form-group.hidden {
+    .form-group.hidden, .hidden {
       display: none !important;
     }
 
@@ -106,7 +105,6 @@
       border-color: var(--accent-color);
     }
 
-    /* Alternating background colors for dropdown options */
     select option:nth-child(odd) {
       background-color: #1e293b;
       color: #f8fafc;
@@ -164,6 +162,68 @@
 
     .unit-input-group select {
       width: 90px;
+    }
+
+    #mixed_cables_container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .mixed-row {
+      background-color: #0f172a;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 90px auto;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    @media (max-width: 600px) {
+      .mixed-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mixed-field label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .btn-action {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      border: none;
+      padding: 10px 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .btn-action:hover {
+      background-color: #0284c7;
+      color: #ffffff;
+    }
+
+    .btn-delete {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-delete:hover {
+      background-color: var(--error-color);
+      color: #ffffff;
     }
 
     .error-msg {
@@ -231,24 +291,84 @@
       margin-top: 8px;
       font-weight: 600;
     }
+
+    details {
+      background-color: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: var(--accent-color);
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.9rem;
+    }
+
+    summary:hover {
+      background-color: rgba(56, 189, 248, 0.05);
+    }
+
+    .table-container {
+      padding: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: #1e293b;
+      color: var(--accent-color);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    tr.highlight-row {
+      background-color: rgba(56, 189, 248, 0.18) !important;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <h1>Conduit to Cable Sizer</h1>
-  <p class="subtitle">CEC Compliant Conduit Fill Calculator<br/>Copyright (c) 2026 Shane McDonald. All rights reserved.</p>
+  <p class="subtitle">CEC Compliant Conduit Fill Calculator</p>
 
   <div class="grid-layout">
     <div class="controls-column">
       
-      <!-- Radio Group: Calculation Selection -->
       <div class="radio-group-container">
         <div class="radio-group-title">What are we Calculating?</div>
         <div class="radio-options" id="cable_selection">
           <label class="radio-option">
-            <input type="radio" name="calc_mode" value="conduit" checked>
-            Minimum Conduit Size
+            <input type="radio" name="calc_mode" value="conduit_single" checked>
+            Minimum Conduit Size - Single Cable Type
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="calc_mode" value="conduit_mixed">
+            Minimum Conduit Size - Mixed Cable Types
           </label>
           <label class="radio-option">
             <input type="radio" name="calc_mode" value="cables">
@@ -261,27 +381,33 @@
         </div>
       </div>
 
-      <!-- Input: Number of Cables -->
-      <div class="form-group" id="group_cable_number">
-        <label for="cable_number">Number of Cables</label>
-        <input type="number" id="cable_number" min="1" max="200" value="3" step="1">
-        <div class="error-msg" id="err_cable_number">Must be a number between 1 and 200 (CEC Max).</div>
-      </div>
-
-      <!-- Input: Cable Diameter & Unit -->
-      <div class="form-group" id="group_cable_diameter">
-        <label for="cable_diameter">Cable Diameter</label>
-        <div class="unit-input-group">
-          <input type="number" id="cable_diameter" min="0.01" step="0.01" value="10">
-          <select id="cable_unit">
-            <option value="mm">mm</option>
-            <option value="inch">inch</option>
-          </select>
+      <div id="single_inputs_wrapper">
+        <div class="form-group" id="group_cable_number">
+          <label for="cable_number">Number of Cables</label>
+          <input type="number" id="cable_number" min="1" max="200" value="3" step="1">
+          <div class="error-msg" id="err_cable_number">Must be a number between 1 and 200 (CEC Max).</div>
         </div>
-        <div class="error-msg" id="err_cable_diameter">Must be a number greater than 0.</div>
+
+        <div class="form-group" id="group_cable_diameter">
+          <label for="cable_diameter">Cable Diameter</label>
+          <div class="unit-input-group">
+            <input type="number" id="cable_diameter" min="0.01" step="0.01" value="10">
+            <select id="cable_unit">
+              <option value="mm">mm</option>
+              <option value="inch">inch</option>
+            </select>
+          </div>
+          <div class="error-msg" id="err_cable_diameter">Must be a number greater than 0.</div>
+        </div>
       </div>
 
-      <!-- Select: EMT Size Dropdown -->
+      <div class="form-group hidden" id="group_mixed_cables">
+        <label>Mixed Cable Sizes & Quantities</label>
+        <div id="mixed_cables_container"></div>
+        <button type="button" class="btn-action" id="btnAddMixedRow">+ Add a cable with a new size</button>
+        <div class="error-msg" id="err_mixed">Total cables cannot exceed 200 (CEC Max). All sizes must be &gt; 0.</div>
+      </div>
+
       <div class="form-group hidden" id="group_conduit_size">
         <label for="conduit_size">EMT Conduit Trade Size</label>
         <select id="conduit_size">
@@ -302,7 +428,6 @@
 
     </div>
 
-    <!-- Output & Visualization Column -->
     <div class="results-column">
       <div class="result-card">
         <div class="result-title" id="result_label">Minimum Conduit Size</div>
@@ -316,10 +441,27 @@
       </div>
     </div>
   </div>
+
+  <details>
+    <summary>EMT Internal Fill Area Reference Table (mm²)</summary>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>EMT Trade Size</th>
+            <th>1 Cable (53%)</th>
+            <th>2 Cables (31%)</th>
+            <th>3+ Cables (40%)</th>
+          </tr>
+        </thead>
+        <tbody id="ref_table_body"></tbody>
+      </table>
+    </div>
+  </details>
+
 </div>
 
 <script>
-  // Data Tables from CEC standard guidelines
   const CONDUIT_DATA = [
     { metric: 16,  trade: '1/2"',   area1: 98.72,   area2: 57.74,   area3: 74.51 },
     { metric: 21,  trade: '3/4"',   area1: 174.93,  area2: 102.32,  area3: 132.03 },
@@ -335,18 +477,35 @@
     { metric: 155, trade: '6"',     area1: 9975.00, area2: 5834.00, area3: 7528.00 }
   ];
 
-  // DOM Elements
+  const refTableBody = document.getElementById('ref_table_body');
+  CONDUIT_DATA.forEach((row, idx) => {
+    const tr = document.createElement('tr');
+    tr.id = `table-row-${idx}`;
+    tr.innerHTML = `
+      <td><strong>${row.metric} (${row.trade})</strong></td>
+      <td>${row.area1.toFixed(2)}</td>
+      <td>${row.area2.toFixed(2)}</td>
+      <td>${row.area3.toFixed(2)}</td>
+    `;
+    refTableBody.appendChild(tr);
+  });
+
   const cableNumberInput = document.getElementById('cable_number');
   const cableDiameterInput = document.getElementById('cable_diameter');
   const cableUnitSelect = document.getElementById('cable_unit');
   const conduitSizeSelect = document.getElementById('conduit_size');
   
+  const singleInputsWrapper = document.getElementById('single_inputs_wrapper');
   const groupCableNumber = document.getElementById('group_cable_number');
   const groupCableDiameter = document.getElementById('group_cable_diameter');
+  const groupMixedCables = document.getElementById('group_mixed_cables');
+  const mixedCablesContainer = document.getElementById('mixed_cables_container');
+  const btnAddMixedRow = document.getElementById('btnAddMixedRow');
   const groupConduitSize = document.getElementById('group_conduit_size');
 
   const errCableNumber = document.getElementById('err_cable_number');
   const errCableDiameter = document.getElementById('err_cable_diameter');
+  const errMixed = document.getElementById('err_mixed');
 
   const resultLabel = document.getElementById('result_label');
   const resultOutput = document.getElementById('result_output');
@@ -355,34 +514,98 @@
   const canvas = document.getElementById('crossSectionCanvas');
   const ctx = canvas.getContext('2d');
 
+  function initMixedRows() {
+    mixedCablesContainer.innerHTML = '';
+    addMixedRow(2, 10, 'mm');
+    addMixedRow(1, 6, 'mm');
+  }
+
+  function addMixedRow(qty = 1, dia = 10, unit = 'mm') {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'mixed-row';
+    rowDiv.innerHTML = `
+      <div class="mixed-field">
+        <label>Quantity</label>
+        <input type="number" class="mixed-qty" min="1" max="200" value="${qty}" step="1">
+      </div>
+      <div class="mixed-field">
+        <label>Diameter</label>
+        <input type="number" class="mixed-dia" min="0.01" step="0.01" value="${dia}">
+      </div>
+      <div class="mixed-field">
+        <label>Unit</label>
+        <select class="mixed-unit">
+          <option value="mm" ${unit === 'mm' ? 'selected' : ''}>mm</option>
+          <option value="inch" ${unit === 'inch' ? 'selected' : ''}>inch</option>
+        </select>
+      </div>
+      <button type="button" class="btn-delete">Remove</button>
+    `;
+
+    rowDiv.querySelector('.btn-delete').addEventListener('click', () => {
+      if (mixedCablesContainer.children.length > 1) {
+        rowDiv.remove();
+        calculate();
+      }
+    });
+
+    rowDiv.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    mixedCablesContainer.appendChild(rowDiv);
+    calculate();
+  }
+
+  btnAddMixedRow.addEventListener('click', () => {
+    addMixedRow(1, 8, 'mm');
+  });
+
   function getAllowableArea(conduitIndex, cableCount) {
     const row = CONDUIT_DATA[conduitIndex];
     if (cableCount === 1) return row.area1;
     if (cableCount === 2) return row.area2;
-    return row.area3; // 3 or more cables
+    return row.area3;
   }
 
   function getSelectedMode() {
     return document.querySelector('input[name="calc_mode"]:checked').value;
   }
 
+  function highlightTableRow(index) {
+    document.querySelectorAll('#ref_table_body tr').forEach(r => r.classList.remove('highlight-row'));
+    if (index >= 0 && index < CONDUIT_DATA.length) {
+      const row = document.getElementById(`table-row-${index}`);
+      if (row) row.classList.add('highlight-row');
+    }
+  }
+
   function updateVisibility() {
     const mode = getSelectedMode();
 
-    // Default: show all
+    singleInputsWrapper.classList.remove('hidden');
     groupCableNumber.classList.remove('hidden');
     groupCableDiameter.classList.remove('hidden');
-    groupConduitSize.classList.remove('hidden');
+    groupMixedCables.classList.add('hidden');
+    groupConduitSize.classList.add('hidden');
 
-    // Hide the input corresponding to what we are solving for
-    if (mode === 'conduit') {
-      groupConduitSize.classList.add('hidden');
+    if (mode === 'conduit_single') {
+      singleInputsWrapper.classList.remove('hidden');
       resultLabel.textContent = 'Minimum Conduit Size';
+    } else if (mode === 'conduit_mixed') {
+      singleInputsWrapper.classList.add('hidden');
+      groupMixedCables.classList.remove('hidden');
+      resultLabel.textContent = 'Minimum Conduit Size (Mixed)';
     } else if (mode === 'cables') {
+      singleInputsWrapper.classList.remove('hidden');
       groupCableNumber.classList.add('hidden');
+      groupConduitSize.classList.remove('hidden');
       resultLabel.textContent = 'Max Number of Cables';
     } else if (mode === 'diameter') {
+      singleInputsWrapper.classList.remove('hidden');
       groupCableDiameter.classList.add('hidden');
+      groupConduitSize.classList.remove('hidden');
       resultLabel.textContent = 'Max Cable Diameter';
     }
 
@@ -392,53 +615,42 @@
   function calculate() {
     cecWarningContainer.innerHTML = '';
     const mode = getSelectedMode();
-    const unit = cableUnitSelect.value;
-    
-    let numCables = parseInt(cableNumberInput.value, 10);
-    let dia = parseFloat(cableDiameterInput.value);
 
-    // Validate inputs based on visibility
-    let valid = true;
+    if (mode === 'conduit_single') {
+      const unit = cableUnitSelect.value;
+      let numCables = parseInt(cableNumberInput.value, 10);
+      let dia = parseFloat(cableDiameterInput.value);
 
-    if (!groupCableNumber.classList.contains('hidden')) {
+      let valid = true;
       if (isNaN(numCables) || numCables < 1 || numCables > 200) {
         errCableNumber.style.display = 'block';
         valid = false;
       } else {
         errCableNumber.style.display = 'none';
       }
-    }
 
-    if (!groupCableDiameter.classList.contains('hidden')) {
       if (isNaN(dia) || dia <= 0) {
         errCableDiameter.style.display = 'block';
         valid = false;
       } else {
         errCableDiameter.style.display = 'none';
       }
-    }
 
-    if (!valid) {
-      resultOutput.textContent = '--';
-      resultDetail.textContent = 'Please fix input errors above.';
-      drawCrossSection(0, 0, 0);
-      return;
-    }
+      if (!valid) {
+        resultOutput.textContent = '--';
+        resultDetail.textContent = 'Please fix input errors above.';
+        highlightTableRow(-1);
+        drawCrossSectionSingle(0, 0, 0);
+        return;
+      }
 
-    // Convert diameter to mm for internal calculations
-    let diaMM = dia;
-    if (unit === 'inch' && !isNaN(dia)) {
-      diaMM = dia * 25.4;
-    }
-
-    if (mode === 'conduit') {
-      const singleCableArea = Math.PI * Math.pow(diaMM / 2, 2);
-      const totalCableArea = numCables * singleCableArea;
+      let diaMM = (unit === 'inch') ? dia * 25.4 : dia;
+      const singleArea = Math.PI * Math.pow(diaMM / 2, 2);
+      const totalArea = numCables * singleArea;
 
       let foundIndex = -1;
       for (let i = 0; i < CONDUIT_DATA.length; i++) {
-        const allowArea = getAllowableArea(i, numCables);
-        if (allowArea >= totalCableArea) {
+        if (getAllowableArea(i, numCables) >= totalArea) {
           foundIndex = i;
           break;
         }
@@ -448,24 +660,95 @@
         const c = CONDUIT_DATA[foundIndex];
         resultOutput.textContent = `${c.metric} mm (${c.trade})`;
         resultDetail.innerHTML = `
-          Total Cable Area: <strong>${totalCableArea.toFixed(1)} mm²</strong><br>
+          Total Cable Area: <strong>${totalArea.toFixed(1)} mm²</strong><br>
           Allowable Area: <strong>${getAllowableArea(foundIndex, numCables).toFixed(1)} mm²</strong>
         `;
-        drawCrossSection(foundIndex, numCables, diaMM);
+        highlightTableRow(foundIndex);
+        drawCrossSectionSingle(foundIndex, numCables, diaMM);
       } else {
         resultOutput.textContent = 'Exceeds Standard EMT';
-        resultDetail.textContent = 'Required area exceeds maximum standard EMT conduit capacity.';
-        drawCrossSection(CONDUIT_DATA.length - 1, numCables, diaMM);
+        resultDetail.textContent = 'Required area exceeds maximum standard EMT capacity.';
+        highlightTableRow(-1);
+        drawCrossSectionSingle(CONDUIT_DATA.length - 1, numCables, diaMM);
+      }
+
+    } else if (mode === 'conduit_mixed') {
+      let totalCount = 0;
+      let totalArea = 0;
+      let mixedList = [];
+      let valid = true;
+
+      const rows = mixedCablesContainer.querySelectorAll('.mixed-row');
+      rows.forEach(r => {
+        const qty = parseInt(r.querySelector('.mixed-qty').value, 10);
+        const dia = parseFloat(r.querySelector('.mixed-dia').value);
+        const unit = r.querySelector('.mixed-unit').value;
+
+        if (isNaN(qty) || qty < 1 || isNaN(dia) || dia <= 0) {
+          valid = false;
+        } else {
+          totalCount += qty;
+          const diaMM = (unit === 'inch') ? dia * 25.4 : dia;
+          const area = qty * Math.PI * Math.pow(diaMM / 2, 2);
+          totalArea += area;
+          mixedList.push({ qty, diaMM });
+        }
+      });
+
+      if (!valid || totalCount > 200 || totalCount < 1) {
+        errMixed.style.display = 'block';
+        resultOutput.textContent = '--';
+        resultDetail.textContent = 'Please check mixed cable quantities and diameters.';
+        highlightTableRow(-1);
+        drawCrossSectionMixed(0, []);
+        return;
+      } else {
+        errMixed.style.display = 'none';
+      }
+
+      let foundIndex = -1;
+      for (let i = 0; i < CONDUIT_DATA.length; i++) {
+        if (getAllowableArea(i, totalCount) >= totalArea) {
+          foundIndex = i;
+          break;
+        }
+      }
+
+      if (foundIndex !== -1) {
+        const c = CONDUIT_DATA[foundIndex];
+        resultOutput.textContent = `${c.metric} mm (${c.trade})`;
+        resultDetail.innerHTML = `
+          Total Cables: <strong>${totalCount}</strong> | Total Area: <strong>${totalArea.toFixed(1)} mm²</strong><br>
+          Allowable Area (${totalCount === 1 ? '53%' : totalCount === 2 ? '31%' : '40%'}): <strong>${getAllowableArea(foundIndex, totalCount).toFixed(1)} mm²</strong>
+        `;
+        highlightTableRow(foundIndex);
+        drawCrossSectionMixed(foundIndex, mixedList);
+      } else {
+        resultOutput.textContent = 'Exceeds Standard EMT';
+        resultDetail.textContent = 'Required area exceeds maximum standard EMT capacity.';
+        highlightTableRow(-1);
+        drawCrossSectionMixed(CONDUIT_DATA.length - 1, mixedList);
       }
 
     } else if (mode === 'cables') {
       const conduitIdx = parseInt(conduitSizeSelect.value, 10);
-      const singleCableArea = Math.PI * Math.pow(diaMM / 2, 2);
+      const unit = cableUnitSelect.value;
+      let dia = parseFloat(cableDiameterInput.value);
+
+      if (isNaN(dia) || dia <= 0) {
+        errCableDiameter.style.display = 'block';
+        resultOutput.textContent = '--';
+        return;
+      } else {
+        errCableDiameter.style.display = 'none';
+      }
+
+      let diaMM = (unit === 'inch') ? dia * 25.4 : dia;
+      const singleArea = Math.PI * Math.pow(diaMM / 2, 2);
 
       let maxCount = 0;
       for (let count = 1; count <= 200; count++) {
-        const allowArea = getAllowableArea(conduitIdx, count);
-        if (count * singleCableArea <= allowArea) {
+        if (count * singleArea <= getAllowableArea(conduitIdx, count)) {
           maxCount = count;
         } else {
           break;
@@ -483,12 +766,23 @@
         Conduit: <strong>${c.metric} mm (${c.trade})</strong><br>
         Cable Dia: <strong>${dia} ${unit}</strong>
       `;
-      drawCrossSection(conduitIdx, maxCount, diaMM);
+      highlightTableRow(conduitIdx);
+      drawCrossSectionSingle(conduitIdx, maxCount, diaMM);
 
     } else if (mode === 'diameter') {
       const conduitIdx = parseInt(conduitSizeSelect.value, 10);
+      const unit = cableUnitSelect.value;
+      let numCables = parseInt(cableNumberInput.value, 10);
+
+      if (isNaN(numCables) || numCables < 1 || numCables > 200) {
+        errCableNumber.style.display = 'block';
+        resultOutput.textContent = '--';
+        return;
+      } else {
+        errCableNumber.style.display = 'none';
+      }
+
       const allowArea = getAllowableArea(conduitIdx, numCables);
-      
       const maxSingleArea = allowArea / numCables;
       const maxDiaMM = 2 * Math.sqrt(maxSingleArea / Math.PI);
       const displayDia = (unit === 'inch') ? (maxDiaMM / 25.4) : maxDiaMM;
@@ -499,18 +793,18 @@
         Conduit: <strong>${c.metric} mm (${c.trade})</strong><br>
         Number of Cables: <strong>${numCables}</strong>
       `;
-      drawCrossSection(conduitIdx, numCables, maxDiaMM);
+      highlightTableRow(conduitIdx);
+      drawCrossSectionSingle(conduitIdx, numCables, maxDiaMM);
     }
   }
 
-  function drawCrossSection(conduitIndex, count, cableDiaMM) {
+  // Unified Bottom-Up Packer for Single Cable Type Views
+  function drawCrossSectionSingle(conduitIndex, count, cableDiaMM) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const canvasRadius = 90;
 
-    // Outer Conduit Circle
     ctx.beginPath();
     ctx.arc(centerX, centerY, canvasRadius, 0, 2 * Math.PI);
     ctx.fillStyle = '#0f172a';
@@ -521,64 +815,158 @@
 
     if (count <= 0 || cableDiaMM <= 0) return;
 
-    // Proportional scaling radius
     const total100PercentArea = CONDUIT_DATA[conduitIndex].area1 / 0.53;
     const conduitInnerRadiusMM = Math.sqrt(total100PercentArea / Math.PI);
     const scale = canvasRadius / conduitInnerRadiusMM;
-    const cableRadiusPx = (cableDiaMM / 2) * scale;
+    const r = (cableDiaMM / 2) * scale;
 
-    // Non-overlapping concentric packing
-    const positions = [];
-    let placed = 0;
-    
-    if (count >= 1) {
-      positions.push({ x: centerX, y: centerY });
-      placed = 1;
+    let individualCables = [];
+    for (let i = 0; i < count; i++) {
+      individualCables.push(r);
     }
 
-    let ring = 1;
-    while (placed < count && ring < 15) {
-      const dist = ring * (cableRadiusPx * 2.05);
-      const circumference = 2 * Math.PI * dist;
-      const fitInRing = Math.floor(circumference / (cableRadiusPx * 2.05));
-      const ringCount = Math.min(count - placed, Math.max(1, fitInRing));
+    const placedCables = [];
+    const safetyGap = 1.0;
 
-      for (let i = 0; i < ringCount; i++) {
-        const angle = (i / ringCount) * 2 * Math.PI;
-        const px = centerX + dist * Math.cos(angle);
-        const py = centerY + dist * Math.sin(angle);
-        
-        // Ensure within conduit wall
-        const distFromCenter = Math.sqrt(Math.pow(px - centerX, 2) + Math.pow(py - centerY, 2));
-        if (distFromCenter + cableRadiusPx <= canvasRadius) {
-          positions.push({ x: px, y: py });
+    individualCables.forEach((radius, idx) => {
+      if (idx === 0) {
+        const maxFloorY = canvasRadius - radius - 4;
+        placedCables.push({ x: centerX, y: centerY + (maxFloorY * 0.3), r: radius });
+      } else {
+        let bestX = centerX;
+        let bestY = centerY + canvasRadius;
+        let found = false;
+
+        for (let testY = centerY + canvasRadius - radius - 2; testY >= centerY - canvasRadius + radius + 2 && !found; testY -= 1) {
+          for (let testX = centerX - canvasRadius + radius + 2; testX <= centerX + canvasRadius - radius - 2 && !found; testX += 1) {
+            
+            const distFromCenter = Math.sqrt(Math.pow(testX - centerX, 2) + Math.pow(testY - centerY, 2));
+            if (distFromCenter + radius > canvasRadius - 1) continue;
+
+            let collision = false;
+            for (let p of placedCables) {
+              const d = Math.sqrt(Math.pow(testX - p.x, 2) + Math.pow(testY - p.y, 2));
+              if (d < radius + p.r + safetyGap) {
+                collision = true;
+                break;
+              }
+            }
+
+            if (!collision) {
+              bestX = testX;
+              bestY = testY;
+              found = true;
+            }
+          }
+        }
+
+        if (found) {
+          placedCables.push({ x: bestX, y: bestY, r: radius });
+        } else {
+          placedCables.push({ x: centerX + (Math.random() - 0.5) * 10, y: centerY + (Math.random() - 0.5) * 10, r: radius });
         }
       }
-      placed = positions.length;
-      ring++;
-    }
+    });
 
-    // Render cables
-    positions.forEach(pos => {
-      ctx.beginPath();
-      ctx.arc(pos.x, pos.y, Math.max(1, cableRadiusPx), 0, 2 * Math.PI);
-      ctx.fillStyle = '#f59e0b';
-      ctx.fill();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = '#78350f';
-      ctx.stroke();
-
-      // Inner conductor core
-      if (cableRadiusPx > 4) {
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, cableRadiusPx * 0.4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#b45309';
-        ctx.fill();
-      }
+    placedCables.forEach(c => {
+      drawCableCircle(c.x, c.y, c.r);
     });
   }
 
-  // Event Listeners
+  // Non-overlapping Bottom-Up Layered Packer for Mixed Cable Types
+  function drawCrossSectionMixed(conduitIndex, mixedList) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const canvasRadius = 90;
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, canvasRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = '#0f172a';
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#38bdf8';
+    ctx.stroke();
+
+    if (mixedList.length === 0) return;
+
+    const total100PercentArea = CONDUIT_DATA[conduitIndex].area1 / 0.53;
+    const conduitInnerRadiusMM = Math.sqrt(total100PercentArea / Math.PI);
+    const scale = canvasRadius / conduitInnerRadiusMM;
+
+    let individualCables = [];
+    mixedList.forEach(item => {
+      for (let i = 0; i < item.qty; i++) {
+        individualCables.push((item.diaMM / 2) * scale);
+      }
+    });
+    individualCables.sort((a, b) => b - a);
+
+    const placedCables = [];
+    const safetyGap = 1.0;
+
+    individualCables.forEach((r, idx) => {
+      if (idx === 0) {
+        const maxFloorY = canvasRadius - r - 4;
+        placedCables.push({ x: centerX, y: centerY + (maxFloorY * 0.3), r });
+      } else {
+        let bestX = centerX;
+        let bestY = centerY + canvasRadius;
+        let found = false;
+
+        for (let testY = centerY + canvasRadius - r - 2; testY >= centerY - canvasRadius + r + 2 && !found; testY -= 1) {
+          for (let testX = centerX - canvasRadius + r + 2; testX <= centerX + canvasRadius - r - 2 && !found; testX += 1) {
+            
+            const distFromCenter = Math.sqrt(Math.pow(testX - centerX, 2) + Math.pow(testY - centerY, 2));
+            if (distFromCenter + r > canvasRadius - 1) continue;
+
+            let collision = false;
+            for (let p of placedCables) {
+              const d = Math.sqrt(Math.pow(testX - p.x, 2) + Math.pow(testY - p.y, 2));
+              if (d < r + p.r + safetyGap) {
+                collision = true;
+                break;
+              }
+            }
+
+            if (!collision) {
+              bestX = testX;
+              bestY = testY;
+              found = true;
+            }
+          }
+        }
+
+        if (found) {
+          placedCables.push({ x: bestX, y: bestY, r });
+        } else {
+          placedCables.push({ x: centerX + (Math.random() - 0.5) * 10, y: centerY + (Math.random() - 0.5) * 10, r });
+        }
+      }
+    });
+
+    placedCables.forEach(c => {
+      drawCableCircle(c.x, c.y, c.r);
+    });
+  }
+
+  function drawCableCircle(x, y, r) {
+    ctx.beginPath();
+    ctx.arc(x, y, Math.max(1, r), 0, 2 * Math.PI);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#78350f';
+    ctx.stroke();
+
+    if (r > 4) {
+      ctx.beginPath();
+      ctx.arc(x, y, r * 0.4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#b45309';
+      ctx.fill();
+    }
+  }
+
   document.querySelectorAll('input[name="calc_mode"]').forEach(radio => {
     radio.addEventListener('change', updateVisibility);
   });
@@ -588,7 +976,7 @@
   cableUnitSelect.addEventListener('change', calculate);
   conduitSizeSelect.addEventListener('change', calculate);
 
-  // Initialize
+  initMixedRows();
   updateVisibility();
 </script>
 
